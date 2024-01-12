@@ -23,8 +23,7 @@ extract_cag_structures_with_modified_errors <- function(seq) {
         }
       }
     }
-    
-    return(type_a_error_count <= 3 && type_b_error_count <= 1)
+    return(type_a_error_count <= 5 && type_b_error_count <= 1)  # Modified here to allow up to 5 Type A errors
   }
   
   sapply(structures, function(match_group) {
@@ -43,25 +42,21 @@ process_fastq_file <- function(fastq_path) {
   #Total reads
   total_reads <- sum(structure_df$Frequency)
   #Count reads with CAG repeat size over 40 and over 100
-  frequency_over_40 <- sum(structure_df[structure_df$Structure > 40, "Frequency"])
-  frequency_over_100 <- sum(structure_df[structure_df$Structure > 100, "Frequency"])
-  frequency_over_113 <- sum(structure_df[structure_df$Structure > 113, "Frequency"])
+  reads_over_40 <- sum(structure_df[structure_df$Structure > 40, "Frequency"])
+  reads_over_100 <- sum(structure_df[structure_df$Structure > 100, "Frequency"])
   #Calculate percentage of reads with CAG repeat size over 100
-  percent_over_100 <- (frequency_over_100 / total_reads) * 100
-  percent_over_113 <- (frequency_over_113 / total_reads) * 100
+  percent_over_100 <- (reads_over_100 / reads_over_100) * 100
   #Save metrics to a CSV file
   metrics_df <- data.frame(
     File = fastq_path,
     Total_Reads = total_reads,
-    Frequency_Over_40 = frequency_over_40,
-    Frequency_Over_100 = frequency_over_100,
-    Frequency_Over_113 = frequency_over_113,
-    Percent_Over_100 = percent_over_100,
-    Percent_Over_113 = percent_over_113
+    Reads_Over_40 = reads_over_40,
+    Reads_Over_100 = reads_over_100,
+    Percent_Reads_Over_100 = percent_over_100
   )
-  metrics_csv_filename <- gsub("\\.fastq.gz$", "_cag_repeat_MODmetrics.csv", fastq_path)
+  metrics_csv_filename <- gsub("\\.fastq.gz$", "_cag_repeat_metrics_5typeA.csv", fastq_path)
   write.csv(metrics_df, metrics_csv_filename, row.names = FALSE)
-  csv_filename <- gsub("\\.fastq.gz$", "_cag_structure_MODcounts.csv", fastq_path)
+  csv_filename <- gsub("\\.fastq.gz$", "_cag_structure_counts_5typeA.csv", fastq_path)
   write.csv(structure_df, csv_filename, row.names = FALSE)
   structure_df <- structure_df[structure_df$Frequency > 0, ]
   structure_df$Structure <- as.numeric(as.character(structure_df$Structure))
@@ -69,13 +64,13 @@ process_fastq_file <- function(fastq_path) {
   # Filter out CAG repeats less than 15 in length
   structure_df <- structure_df[structure_df$Structure >= 15, ]
   bar_plot <- ggplot(structure_df, aes(x = Structure, y = Frequency)) +
-    geom_bar(stat = "identity", fill = "purple") +
+    geom_bar(stat = "identity", fill = "red") +
     labs(title = "Frequency of (CAG)n Repeat size", x = "(CAG)n Repeat Size", y = "Frequency") + 
     scale_x_continuous(breaks = seq(0, max(structure_df$Structure), by = 5)) + 
     theme_classic()
   range_text <- paste("The range of CAG repeat size detected is", min(structure_df$Structure), "to", max(structure_df$Structure), ".")
   bar_plot2 <- bar_plot + annotate("text", x = Inf, y = Inf, label = range_text, hjust = 1.1, vjust = 1.1, size = 10, angle = 0, color = "black") 
-  png_filename <- gsub("\\.fastq.gz$", "_MODcag_frequencyplot.png", fastq_path)
+  png_filename <- gsub("\\.fastq.gz$", "_cag_frequency_plot_5typeA.png", fastq_path)
   ggsave(png_filename, plot = bar_plot2, width = 15, height = 15, device = "png")
 }
 # Set your working directory if needed

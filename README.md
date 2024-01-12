@@ -21,6 +21,12 @@ Targeted Miseq data from HTT exon1 CAG repeat (Strategy- [Ciosi et al 2021](http
 
 
 DONE!
+
 Testing with the 7094 sample (which has known no. of CAGn) and using Kert's suggestion about percentage calculation:  
 % of reads over 100 is 0.09% for 3 errors, 0.4 % for 5 errors and 0.2% for 7 errors.  
 The code is working well. Will settle for one of these error-cutoffs after today's discussion.
+
+Moving ahead with 5 and 7 type A errors with selected samples, going to compare them with the alignments seen in those samples and settle on the cut-off of this error type.
+
+Next steps will be improving the look of the output graph, the metric report in csv and accelerating the program somehow (Ivy?).
+

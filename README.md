@@ -18,3 +18,9 @@ A frequency distribution plot. DONE
 A metric file with percentage of extremely long CAG repeats. DONE  
 **F. References:**
 Targeted Miseq data from HTT exon1 CAG repeat (Strategy- [Ciosi et al 2021](https://content.iospress.com/articles/journal-of-huntingtons-disease/jhd200433), [Matlik et al 2023](https://www.biorxiv.org/content/10.1101/2023.04.24.538082v2.abstract)).
+
+
+DONE!
+Testing with the 7094 sample (which has known no. of CAGn) and using Kert's suggestion about percentage calculation:  
+% of reads over 100 is 0.09% for 3 errors, 0.4 % for 5 errors and 0.2% for 7 errors.  
+The code is working well. Will settle for one of these error-cutoffs after today's discussion.

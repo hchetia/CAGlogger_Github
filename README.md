@@ -24,15 +24,15 @@ Targeted Miseq data from HTT exon1 CAG repeat (Strategy- [Ciosi et al 2021](http
 _Catch- _Our in-house and published alignment-based CAG genotyping studies have revealed that the most common right flank structure of mutCAG allele is ....(CAG)nCAACAGCCG_CCA_CCGCCG. The algo halts counting the structure at CCA as it has two base substitutions within one triplet codon, thereby calculating 3 CAGs less in each allele structure reported. This issue has been appropiately addressed in our code.   
 
 **NEXT in 2024-**   
-~~1. Get the conda env and slurm+R script together.~~
-2. Share with Nick.
-~~3. Get the trgt database path repeats (31 repeats atm)~~
-4. Select the repeats that have an identical assay (with open source geo datasets) (FEB END)
-5. Dig into literature if there are any new path repeats that aren't in these 31 ref.
-6. Create functions (MARCH)
-7. Download GEO raw data and replicate the results. (MARCH)
-8. Create the shiny app OR a viewer (something like REVIEWER Maybe)?? (APR)
-9. Users should be able download some format of visualisation to test with alignment data. (APR)
-10. Write the package. Collab with BRC!? 
-11. Draft of paper (Bioinformatics journal).
+~~1. Get the conda env and slurm+R script together.~~  
+2. Share with Nick.  
+~~3. Get the trgt database path repeats (31 repeats atm)~~  
+4. Select the repeats that have an identical assay (with open source geo datasets) (FEB END)  
+5. Dig into literature if there are any new path repeats that aren't in these 31 ref.  
+6. Create functions (MARCH)  
+7. Download GEO raw data and replicate the results. (MARCH)  
+8. Create the shiny app OR a viewer (something like REVIEWER Maybe)?? (APR)  
+9. Users should be able download some format of visualisation to test with alignment data. (APR)  
+10. Write the package. Collab with BRC!?   
+11. Draft of paper (Bioinformatics journal).  
 12. Make it squeaky clean, bug-free and PUBLISHHHHH in a free bioinfo journal. (Ivy got a headstart on this. Draft ready for submission by June)

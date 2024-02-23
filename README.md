@@ -25,8 +25,11 @@ _Catch- _Our in-house and published alignment-based CAG genotyping studies have 
 
 **NEXT in 2024-**   
 1. Get the conda env and slurm+R script together and share with Nick+kert.
-2. Get the trgt database path repeats > select the repeats that have an identical assay (with open source geo datasets)
-3. create functions for those
-4. Download GEO raw data and replicate the results.
-5. Create the shiny app.
-6. Write the package and PUBLISHHHHH.
+2. Get the trgt database path repeats (31 repeats atm)
+3. Select the repeats that have an identical assay (with open source geo datasets) (FEB END)
+4. Dig into literature if there are any new path repeats that aren't in these 31 ref.
+5. Create functions (MARCH)
+6. Download GEO raw data and replicate the results. (MARCH)
+7. Create the shiny app OR a viewer (something like REVIEWER Maybe)??
+8. Users should be able download some format of visualisation to test with alignment data.
+9. Write the package and PUBLISHHHHH.

@@ -27,10 +27,14 @@ _Catch- _Our in-house and published alignment-based CAG genotyping studies have 
 ~~1. Get the conda env and slurm+R script together.~~  
 2. Share with Nick.  
 ~~3. Get the trgt database path repeats (31 repeats atm)~~  
-4. Select the repeats that have an identical assay (with open source geo datasets) (FEB END)  
-5. Dig into literature if there are any new path repeats that aren't in these 31 ref.  
-6. Create functions (MARCH)  
-7. Download GEO raw data and replicate the results. (MARCH)  
+~~4. Select the repeats that have an identical assay (with open source geo datasets)~~  
+```diff
+# --Kert shared TCF4 data (n=52) to be tested. CTG repeat function (Ivy tested one on some test ATXN3 samples).
++ 5. Dig into literature if there are any new path repeats that aren't in these 31 ref.
+! 6. Create functions (MARCH) - CTG (TCF4, ATXN3)
+@@ how to use it in rnaseq!! @@
+```
+~~7. Download GEO raw data and replicate the results.(MARCH)~~
 8. Create the shiny app OR a viewer (something like REVIEWER Maybe)?? (APR)  
 9. Users should be able download some format of visualisation to test with alignment data. (APR)  
 10. Write the package. Collab with BRC!?   

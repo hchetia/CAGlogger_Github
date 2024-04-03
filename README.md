@@ -15,28 +15,28 @@ Maximum threshold for Type B Error per CAG stretch is 1.   CHECK
 **D. What are the inputs?**
 FastQ files (generated using the protocol in References Section).  
 **E. What are the outputs?**
-A frequency CSV file all CAG repeats > 15 and their frequencies [*Adjust for 3 repeats*]. DONE
-A frequency distribution plot for > 35. DONE     
+A frequency CSV file all CAG repeats > 35 [*Adjust for 3 repeats*].    
 A metric file with percentage of extremely long CAG repeats. DONE.   
 **F. References:**
 Targeted Miseq data from HTT exon1 CAG repeat (Strategy- [Ciosi et al 2021](https://content.iospress.com/articles/journal-of-huntingtons-disease/jhd200433), [Matlik et al 2023](https://www.biorxiv.org/content/10.1101/2023.04.24.538082v2.abstract)).
 ~~Next steps will be reducing the program's runtime per sample.~~  
 _Catch- _Our in-house and published alignment-based CAG genotyping studies have revealed that the most common right flank structure of mutCAG allele is ....(CAG)nCAACAGCCG_CCA_CCGCCG. The algo halts counting the structure at CCA as it has two base substitutions within one triplet codon, thereby calculating 3 CAGs less in each allele structure reported. This issue has been appropiately addressed in our code.   
-
 **NEXT in 2024-**   
 ~~1. Get the conda env and slurm+R script together.~~  
-2. Share with Nick.  
+~~2. Share with Nick.~~  
 ~~3. Get the trgt database path repeats (31 repeats atm)~~  
 ~~4. Select the repeats that have an identical assay (with open source geo datasets)~~  
 ```diff
-# --Kert shared TCF4 data (n=52) to be tested. CTG repeat function (Ivy tested one on some test ATXN3 samples).
+# --Kert shared TCF4 data (n=8) to be tested. CTG repeat function (Ivy tested one on some test ATXN3 samples).
 + 5. Dig into literature if there are any new path repeats that aren't in these 31 ref.
-+ 6. Create functions (MARCH) - CTG (TCF4, ATXN3)
-@@ how to use it in rnaseq!! @@
-~~7. Download GEO raw data and replicate the results (MARCH)~~
-# 8. Create the shiny app OR a viewer (something like REVIEWER Maybe)?? (APR)  
-# 9. Users should be able download some format of visualisation to test with alignment data. (APR)  
 ```
+~~6. Create functions - CTG (TCF4, ATXN3) DONE~~
+```diff
+@@ how to use it in rnaseq!! @@
+```
+~~7. Download GEO raw data and replicate the results (MARCH)~~
+8. Create the shiny app OR a viewer (something like REVIEWER Maybe)?? (APR)  
+9. Users should be able download some format of visualisation to test with alignment data. (APR)  
 10. Write the package. Collab with BRC!?   
 11. Draft of paper (Bioinformatics journal).  
 12. Make it squeaky clean, bug-free and PUBLISHHHHH in a free bioinfo journal. (Ready the Draft for submission by July)

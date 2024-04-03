@@ -40,7 +40,13 @@ process_fastq_file <- function(fastq_path) {
   sequences <- sread(fastq_data)
   structure_list <- lapply(as.character(sequences), extract_cag_structures_with_modified_errors)
   structure_tally <- table(unlist(structure_list))
+  
+  # Create structure_df from structure_tally and apply modifications
   structure_df <- data.frame(Structure = names(structure_tally), Frequency = as.integer(structure_tally))
+  structure_df <- subset(structure_df, as.numeric(Structure) >= 32)
+  structure_df$Structure <- as.numeric(structure_df$Structure) - 3
+  structure_df <- subset(structure_df, Structure >= 35)
+  
   # Count reads with CAG repeat size over 35 and over 110
   reads_over_35 <- sum(structure_df[structure_df$Structure > 35, "Frequency"])
   reads_over_110 <- sum(structure_df[structure_df$Structure > 110, "Frequency"])
@@ -50,7 +56,7 @@ process_fastq_file <- function(fastq_path) {
   if (reads_over_35 > 0) {
     percent_over_110 <- (reads_over_110 / reads_over_35) * 100
   } else {
-    percent_over_110 <- NA  # or another default value or handling as per your analysis requirement
+    percent_over_110 <- 0  # or another default value or handling as per your analysis requirement
   }
   
   # Save metrics to a CSV file
@@ -66,7 +72,7 @@ process_fastq_file <- function(fastq_path) {
   write.csv(metrics_df, metrics_csv_filename, row.names = FALSE)
   csv_filename <- gsub("\\.fastq.gz$", "_cagloggerv1.1_FrequencyOfRepeats.csv", fastq_path)
   write.csv(structure_df, csv_filename, row.names = FALSE)
-  }
+}
 #working directory
 setwd("/ru-auth/local/home/hchetia/caglogger_test")
 fastq_files <- list.files(pattern = "\\.fastq.gz$")

@@ -50,7 +50,7 @@ process_fastq_file <- function(fastq_path) {
   if (reads_over_35 > 0) {
     percent_over_110 <- (reads_over_110 / reads_over_35) * 100
   } else {
-    percent_over_110 <- 0  # or another default value or handling as per your analysis requirement
+    percent_over_110 <- NA  # or another default value or handling as per your analysis requirement
   }
   
   # Save metrics to a CSV file

@@ -41,16 +41,21 @@ process_fastq_file <- function(fastq_path) {
   structure_list <- lapply(as.character(sequences), extract_cag_structures_with_modified_errors)
   structure_tally <- table(unlist(structure_list))
   structure_df <- data.frame(Structure = names(structure_tally), Frequency = as.integer(structure_tally))
-  #Total reads
+  # Total reads
   total_reads <- sum(structure_df$Frequency)
-  #Count reads with CAG repeat size over 35 and over 110
+  # Count reads with CAG repeat size over 35 and over 110
   reads_over_35 <- sum(structure_df[structure_df$Structure > 35, "Frequency"])
   reads_over_110 <- sum(structure_df[structure_df$Structure > 110, "Frequency"])
   
+  # Calculate percentage of reads with CAG repeat size over 110
+  # Check to avoid division by zero
+  if (reads_over_35 > 0) {
+    percent_over_110 <- (reads_over_110 / reads_over_35) * 100
+  } else {
+    percent_over_110 <- 0  # or another default value or handling as per your analysis requirement
+  }
   
-  #Calculate percentage of reads with CAG repeat size over 100
-  percent_over_110 <- (reads_over_110/reads_over_35) * 100
-  #Save metrics to a CSV file
+  # Save metrics to a CSV file
   extracted_part <- unlist(strsplit(fastq_path, "_"))[1]
   sample_text <- paste("CAG LOGGER v1.1 Report : SAMPLE ID", extracted_part)
   metrics_df <- data.frame(
@@ -59,18 +64,14 @@ process_fastq_file <- function(fastq_path) {
     Reads_Over_35 = reads_over_35,
     Reads_Over_110 = reads_over_110,
     Percent_Reads_Over_110 = percent_over_110
-    )
-  metrics_csv_filename <- gsub("\\.fastq.gz$", "_cag_repeat_metrics_5typeA.csv", fastq_path)
+  )
+  metrics_csv_filename <- gsub("\\.fastq.gz$", "_cagloggerv1.1_RepeatMetrics.csv", fastq_path)
   write.csv(metrics_df, metrics_csv_filename, row.names = FALSE)
-  csv_filename <- gsub("\\.fastq.gz$", "_cag_structure_counts_5typeA.csv", fastq_path)
+  csv_filename <- gsub("\\.fastq.gz$", "_cagloggerv1.1_FrequencyOfRepeats.csv", fastq_path)
   write.csv(structure_df, csv_filename, row.names = FALSE)
-  structure_df <- structure_df[structure_df$Frequency > 0, ]
-  structure_df$Structure <- as.numeric(as.character(structure_df$Structure))
-  structure_df <- structure_df[order(structure_df$Structure), ]
-  # Filter out CAG repeats less than 35 in length
-  structure_df <- structure_df[structure_df$Structure >= 15, ]
-}
+  }
 #working directory
+setwd("/ru-auth/local/home/hchetia/caglogger_test")
 fastq_files <- list.files(pattern = "\\.fastq.gz$")
 tic()
 for (file in fastq_files) {

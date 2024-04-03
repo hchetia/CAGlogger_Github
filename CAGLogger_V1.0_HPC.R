@@ -2,9 +2,13 @@
 #V1.1
 #Date:04_01_2024
 
+#working directory
+setwd("/ru-auth/local/home/hchetia/caglogger_test/corrected")
+#loading libraries
 library(ShortRead)
 library(tictoc)
 
+#function
 extract_cag_structures_with_modified_errors <- function(seq) {
   pattern <- "(CAG|CA[ATCG]|C[ATCG]G|[ATCG]AG)+"
   matches <- gregexpr(pattern, seq, perl = TRUE)
@@ -34,31 +38,43 @@ extract_cag_structures_with_modified_errors <- function(seq) {
     lengths[lengths > 0]
   })
 }
+#processing
 process_fastq_file <- function(fastq_path) {
   fastq_data <- readFastq(fastq_path)
   sequences <- sread(fastq_data)
   structure_list <- lapply(as.character(sequences), extract_cag_structures_with_modified_errors)
   structure_tally <- table(unlist(structure_list))
   
-  # Create structure_df from structure_tally and apply modifications
+  #Creating structure_df from structure_tally with adjustments for 3 over-estimated CAG repeat sizes
   structure_df <- data.frame(Structure = names(structure_tally), Frequency = as.integer(structure_tally))
   structure_df <- subset(structure_df, as.numeric(Structure) >= 32)
   structure_df$Structure <- as.numeric(structure_df$Structure) - 3
   structure_df <- subset(structure_df, Structure >= 35)
+   #Calculating mode of the Structures
+  mode_structure <- names(which.max(table(structure_df$Structure)))
+  #Creating a frequency table for plotting
+  freq_table <- table(structure_df$Structure)
   
-  # Count reads with CAG repeat size over 35 and over 110
+  #Barplot of Frequency
+  plot_filename <- gsub("\\.fastq.gz$", "_structure_frequency_plot.png", fastq_path)
+  png(plot_filename, width=800, height=600)
+  barplot(freq_table, main="Frequency of Structures", xlab="Structure Length", ylab="Frequency",
+          col=ifelse(names(freq_table) == mode_structure, "red", "gray"), las=2)
+  legend("topright", legend=paste("Mode:", mode_structure), fill="red")
+  dev.off()
+
+  # Counting reads with CAG repeat size over 35 and over 110
   reads_over_35 <- sum(structure_df[structure_df$Structure > 35, "Frequency"])
   reads_over_110 <- sum(structure_df[structure_df$Structure > 110, "Frequency"])
   
-  # Calculate percentage of reads with CAG repeat size over 110
-  # Check to avoid division by zero
+  #Metrics Calculation
+  #Precheck to avoid division by zero
   if (reads_over_35 > 0) {
     percent_over_110 <- (reads_over_110 / reads_over_35) * 100
   } else {
-    percent_over_110 <- 0  # or another default value or handling as per your analysis requirement
+    percent_over_110 <- NA 
   }
-  
-  # Save metrics to a CSV file
+  #Saving metrics file to a CSV file
   extracted_part <- unlist(strsplit(fastq_path, "_"))[1]
   sample_text <- paste("CAG LOGGER v1.1 Report : SAMPLE ID", extracted_part)
   metrics_df <- data.frame(
@@ -67,13 +83,11 @@ process_fastq_file <- function(fastq_path) {
     Reads_Over_110 = reads_over_110,
     Percent_Reads_Over_110 = percent_over_110
   )
-  metrics_csv_filename <- gsub("\\.fastq.gz$", "_cagloggerv1.1_RepeatMetrics.csv", fastq_path)
+  metrics_csv_filename <- gsub("\\.fastq.gz$", "_CAGLogger.v1.1_RepeatMetrics.csv", fastq_path)
   write.csv(metrics_df, metrics_csv_filename, row.names = FALSE)
-  csv_filename <- gsub("\\.fastq.gz$", "_cagloggerv1.1_FrequencyOfRepeats.csv", fastq_path)
+  csv_filename <- gsub("\\.fastq.gz$", "_CAGLogger.v1.1_FrequencyOfRepeats.csv", fastq_path)
   write.csv(structure_df, csv_filename, row.names = FALSE)
 }
-#working directory
-setwd("/ru-auth/local/home/hchetia/caglogger_test")
 fastq_files <- list.files(pattern = "\\.fastq.gz$")
 tic()
 for (file in fastq_files) {

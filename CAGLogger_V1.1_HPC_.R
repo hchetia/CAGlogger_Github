@@ -1,9 +1,9 @@
 #Authors: Hasnahana Chetia; Ivy Kosater; Kert Matlik
 #V1.1
 #Date:04_01_2024
-
-#working directory
-setwd("/ru-auth/local/home/hchetia/caglogger_test/corrected")
+#activate corresponding conda environment and ensure the libraries are installed
+#set the working directory
+setwd("/ru-auth/local/home/hchetia/caglogger_test")
 #loading libraries
 library(ShortRead)
 library(tictoc)
@@ -55,14 +55,6 @@ process_fastq_file <- function(fastq_path) {
   #Creating a frequency table for plotting
   freq_table <- table(structure_df$Structure)
   
-  #Barplot of Frequency
-  plot_filename <- gsub("\\.fastq.gz$", "_structure_frequency_plot.png", fastq_path)
-  png(plot_filename, width=800, height=600)
-  barplot(freq_table, main="Frequency of Structures", xlab="Structure Length", ylab="Frequency",
-          col=ifelse(names(freq_table) == mode_structure, "red", "gray"), las=2)
-  legend("topright", legend=paste("Mode:", mode_structure), fill="red")
-  dev.off()
-
   # Counting reads with CAG repeat size over 35 and over 110
   reads_over_35 <- sum(structure_df[structure_df$Structure > 35, "Frequency"])
   reads_over_110 <- sum(structure_df[structure_df$Structure > 110, "Frequency"])

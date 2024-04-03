@@ -41,8 +41,6 @@ process_fastq_file <- function(fastq_path) {
   structure_list <- lapply(as.character(sequences), extract_cag_structures_with_modified_errors)
   structure_tally <- table(unlist(structure_list))
   structure_df <- data.frame(Structure = names(structure_tally), Frequency = as.integer(structure_tally))
-  # Total reads
-  total_reads <- sum(structure_df$Frequency)
   # Count reads with CAG repeat size over 35 and over 110
   reads_over_35 <- sum(structure_df[structure_df$Structure > 35, "Frequency"])
   reads_over_110 <- sum(structure_df[structure_df$Structure > 110, "Frequency"])
@@ -60,7 +58,6 @@ process_fastq_file <- function(fastq_path) {
   sample_text <- paste("CAG LOGGER v1.1 Report : SAMPLE ID", extracted_part)
   metrics_df <- data.frame(
     File = sample_text,
-    Total_Reads = total_reads,
     Reads_Over_35 = reads_over_35,
     Reads_Over_110 = reads_over_110,
     Percent_Reads_Over_110 = percent_over_110

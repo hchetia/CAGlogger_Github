@@ -3,7 +3,6 @@
 #Date:04_01_2024
 
 library(ShortRead)
-library(ggplot2)
 library(tictoc)
 
 extract_cag_structures_with_modified_errors <- function(seq) {

@@ -39,4 +39,4 @@ _Catch- _Our in-house and published alignment-based CAG genotyping studies have 
 9. Users should be able download some format of visualisation to test with alignment data. (APR)  
 10. Write the package. Collab with BRC!?   
 11. Draft of paper (Bioinformatics journal).  
-12. Make it squeaky clean, bug-free and PUBLISHHHHH in a free bioinfo journal. (Ready the Draft for submission by July)
+12. Make it squeaky clean, bug-free and PUBLISHHHHH in a free bioinfo journal. (Ready the Draft for submission by July 2025)

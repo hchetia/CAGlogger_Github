@@ -35,8 +35,11 @@ extract_cag_structures_with_modified_errors <- function(seq) {
 #lengths = list object containing the structure lengths you wish to pull from fastq file
 select_repeat_lengths <- function(fastq_path, lengths){
   seq = fastq_path
+  lengths <- lengths+2
   fastq_data <- readFastq(fastq_path)
   sequences <- sread(fastq_data)
+  
+  #slow step
   structure_list <- lapply(as.character(sequences), extract_cag_structures_with_modified_errors)
   samples <- c()
   read <- c()
@@ -45,7 +48,7 @@ select_repeat_lengths <- function(fastq_path, lengths){
   #Main loop
   while(i < length(structure_list)){
     tmp <- structure_list[i]
-    x <- l %in% tmp[[1]]
+    x <- lengths %in% tmp[[1]]
     y <- TRUE %in% x
     if(y == TRUE){
       samples <- append(samples, tmp)
@@ -55,17 +58,12 @@ select_repeat_lengths <- function(fastq_path, lengths){
     rm(x)
     rm(y)
   }
-    
+  
   
   filtered_seq <- sequences[read[1:length(read)]]
-  for(i in lengths){
-    writeXStringSet(filtered_seq, paste(fastq_path, as.character(i), ".fasta"))
-  }
+  writeXStringSet(filtered_seq, paste(fastq_path, as.character(lengths), ".fasta"))
   
 }
 
-
-#Example: using the function to extract reads of length 61 and 62
-#select_repeat_lengths("4089_CAG_0109_donor3167_Caudate_DRD2pos_rerun_400_S20_R1_001.fastq.gz",
-#                      c(61,62))
-
+#Example
+#select_repeat_lengths("4076_CAG_119_donor2341_Caudate_DRD1pos_S7_R1_001.fastq.gz", c(53))

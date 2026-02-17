@@ -2,9 +2,10 @@
 
 <img width="662" alt="image" src="https://github.com/hchetia/CAGLogger/assets/64626735/76b39313-8ffd-4e03-bf76-8020ca1f3a8f">
 
-**Broad Goal:**
+**Broad Goal:** 
 Detecting CAG/CTG repeats that are extremely long (> 110) from targeted amplicon sequencing. The tested loci are CAG repeat loci in HTT exon1 and CTG repeat loci in ATXN3 genes . We use an in-house alignment free detection script with BWA and tally CAG/CTG repeats from targeted MiSeq data from genomic DNA. 
-**A. Define Type A Error**:  1 base substitution per one CAG repeat (concept of mismatches or gap not applied here).  
+**A. Define Type A Error**: 
+1 base substitution per one CAG repeat (concept of mismatches or gap not applied here).  
 **B. Define Type B Error:**  Two consecutive CAG repeats with Type A Error.  
 **C. Error Cut-offs**:   Maximum Type A Error allowed per CAG stretch is 5. Maximum threshold for Type B Error per CAG stretch is 1.
 **D. Inputs to CAGlogger** FastQ files (generated using the protocol in References Section).  

@@ -17,9 +17,6 @@ A frequency CSV file all C[A/T]G repeats > 35; A metric file with percentage of 
 **F. Percentage of reads over 110**  
 (Total reads with CAG over 110/Total reads with CAG over 35) * 100.  
 
-**Note**  
-[Our in-house and published alignment-based CAG genotyping studies have revealed that the most common right flank structure of mutCAG allele is ....(CAG)nCAACAGCCG_CCA_CCGCCG. The algo halts counting the structure at CCA as it has two base substitutions within one triplet codon, thereby calculating 3 CAGs less in each allele structure reported. This issue has been appropiately addressed in our code.]  
-
 **References:**  
 [Ciosi et al 2021](https://content.iospress.com/articles/journal-of-huntingtons-disease/jhd200433)  
 [Matlik et al 2023](https://www.nature.com/articles/s41588-024-01653-6).

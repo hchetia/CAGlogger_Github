@@ -53,5 +53,5 @@ structure_df_TR1 <- subset(df3, as.numeric(Structure) >= 1)
 
 structure_df_TR50 <- subset(df3, as.numeric(Structure) >= 50)
 
-write.csv(structure_df_TR1, "7992_ATXN3-CTG.csv", row.names = FALSE)
-write.csv(structure_df_TR50, "7992_ATXN3-CTG_over50.csv", row.names = FALSE)
+write.csv(structure_df_TR1, "oldCTGlogger_results_with_sim.csv", row.names = FALSE)
+write.csv(structure_df_TR50, "oldCTGlogger_results_with_sim_over50.csv", row.names = FALSE)

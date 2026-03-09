@@ -33,8 +33,9 @@ extract_ctg_structures_with_modified_errors <- function(seq) {
 
 
 
-gunzip("7992_ATXN3_6114_unsorted_S4_R1_001.fastq.gz")
-fastq_data <- readFastq("7992_ATXN3_6114_unsorted_S4_R1_001.fastq")
+#gunzip("7992_ATXN3_6114_unsorted_S4_R1_001.fastq.gz")
+#fastq_data <- readFastq("7992_ATXN3_6114_unsorted_S4_R1_001.fastq")
+fastq_data <- readFastq("atxn3_sim.fastq.gz")
 sequences <- sread(fastq_data)
 
 structure_list_TR <- lapply(as.character(sequences), extract_ctg_structures_with_modified_errors)

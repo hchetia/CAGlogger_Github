@@ -1,6 +1,6 @@
 #!/usr/bin/env Rscript
 # ══════════════════════════════════════════════════════════════════════════════
-# CAG LOGGER v2.1c — R implementation
+# CAG LOGGER v2.1d — R implementation
 # Alignment-free estimation of CAG repeats from targeted amplicon MiSeq data
 #
 # Counting method:
@@ -37,13 +37,13 @@
 # Dependencies: ShortRead + Biostrings (required).
 # ══════════════════════════════════════════════════════════════════════════════
 
-VERSION <- "2.1c" #typeAerrorsdynamic(for long repeats ~6)
+VERSION <- "2.1d" #revisionA,BandC merged
 
 # ── Load required packages ───────────────────────────────────────────────────
 
-if (!requireNamespace("ShortRead", quietly = TRUE)) {
- stop("ShortRead package is required. Install via BiocManager::install('ShortRead')")
-}
+# if (!requireNamespace("ShortRead", quietly = TRUE)) {
+#  stop("ShortRead package is required. Install via BiocManager::install('ShortRead')")
+# }
 
 library(ShortRead)
 library(Biostrings)
@@ -70,7 +70,7 @@ is_ccg_like <- function(triplet) {
 #
 # Fix A: regex includes N at each mismatch position.
 
-CAG_PATTERN <- "(CAG|CA[ATCGN]|C[ATCGN]G|[ATCGN]AG)+"
+CAG_PATTERN <- "CAG(CAG|CA[ATCGN]|C[ATCGN]G|[ATCGN]AG)+"
 
 #' Extract the longest valid CAG match from a single sequence.
 #' The reported length is the count of pure "CAG" triplets only.
@@ -80,7 +80,7 @@ CAG_PATTERN <- "(CAG|CA[ATCGN]|C[ATCGN]G|[ATCGN]AG)+"
 #'                      NA if a match was accepted or no match existed.
 extract_cag_from_read <- function(seq,
                                   max_type_a     = 5L,
-                                  max_type_b     = 2L,
+                                  max_type_b     = 1L,
                                   type_a_rate    = 0.05) {
  
  matches <- gregexpr(CAG_PATTERN, seq, perl = TRUE)
@@ -581,54 +581,54 @@ process_fastq_file <- function(fastq_path,
 # adaptive Type A threshold.  The effective threshold is:
 #   max(max_type_a, floor(n_triplets * type_a_rate))
 
-if (!interactive()) {
- 
- args <- commandArgs(trailingOnly = TRUE)
- 
- fastq_path  <- if (length(args) >= 1) args[1] else stop("Usage: Rscript CAG_LOGGER_v2.1c.R <input.fastq[.gz]> [output_dir] [type_a_rate]")
- output_dir  <- if (length(args) >= 2) args[2] else "."
- type_a_rate <- if (length(args) >= 3) as.numeric(args[3]) else 0.05
- 
- message(strrep("=", 54))
- message("  CAG LOGGER v", VERSION)
- message(strrep("=", 54))
- message("Input:       ", fastq_path)
- message("Output:      ", output_dir)
- message("type_a_rate: ", type_a_rate)
- message("")
- 
- t0 <- proc.time()
- 
- result <- process_fastq_file(
-  fastq_path        = fastq_path,
-  sample_id         = NULL,
-  q_threshold       = 20,
-  min_repeat_length = 0L,
-  max_type_a        = 5L,
-  max_type_b        = 2L,
-  type_a_rate       = type_a_rate,
-  chunk_size        = 50000L,
-  allele_bw         = 1.5,
-  output_dir        = output_dir
- )
- 
- elapsed <- (proc.time() - t0)["elapsed"]
- message(sprintf("\nDone in %.1f seconds.", elapsed))
- 
- if (!is.null(result)) {
-  message("\n── Top 15 Repeat Lengths ──")
-  top <- head(result$freq_table[order(-result$freq_table$Frequency), ], 15)
-  print(top, row.names = FALSE)
-  
-  if (result$threshold_rejected > 0L) {
-   message(sprintf(
-    "\n── %d reads were rejected by error thresholds ──",
-    result$threshold_rejected))
-   message("   See _ThresholdRejected.csv for raw match sizes.")
-   message("   If many rejected matches are long, consider increasing type_a_rate.")
-  }
- }
-}
+# if (!interactive()) {
+#  
+#  args <- commandArgs(trailingOnly = TRUE)
+#  
+#  fastq_path  <- if (length(args) >= 1) args[1] else stop("Usage: Rscript CAG_LOGGER_v2.1c.R <input.fastq[.gz]> [output_dir] [type_a_rate]")
+#  output_dir  <- if (length(args) >= 2) args[2] else "."
+#  type_a_rate <- if (length(args) >= 3) as.numeric(args[3]) else 0.05
+#  
+#  message(strrep("=", 54))
+#  message("  CAG LOGGER v", VERSION)
+#  message(strrep("=", 54))
+#  message("Input:       ", fastq_path)
+#  message("Output:      ", output_dir)
+#  message("type_a_rate: ", type_a_rate)
+#  message("")
+#  
+#  t0 <- proc.time()
+#  
+#  result <- process_fastq_file(
+#   fastq_path        = fastq_path,
+#   sample_id         = NULL,
+#   q_threshold       = 20,
+#   min_repeat_length = 0L,
+#   max_type_a        = 5L,
+#   max_type_b        = 1L,
+#   type_a_rate       = type_a_rate,
+#   chunk_size        = 50000L,
+#   allele_bw         = 1.5,
+#   output_dir        = output_dir
+#  )
+#  
+#  elapsed <- (proc.time() - t0)["elapsed"]
+#  message(sprintf("\nDone in %.1f seconds.", elapsed))
+#  
+#  if (!is.null(result)) {
+#   message("\n── Top 15 Repeat Lengths ──")
+#   top <- head(result$freq_table[order(-result$freq_table$Frequency), ], 15)
+#   print(top, row.names = FALSE)
+#   
+#   if (result$threshold_rejected > 0L) {
+#    message(sprintf(
+#     "\n── %d reads were rejected by error thresholds ──",
+#     result$threshold_rejected))
+#    message("   See _ThresholdRejected.csv for raw match sizes.")
+#    message("   If many rejected matches are long, consider increasing type_a_rate.")
+#   }
+#  }
+# }
 
 # ══════════════════════════════════════════════════════════════════════════════
 # BATCH PROCESSING EXAMPLE
@@ -638,19 +638,19 @@ if (!interactive()) {
 #
 # fastq_files <- list.files(pattern = "\\.(fastq|fq)(\\.gz)?$")
 #
-# library(tictoc)
-# tic()
-# results <- list()
-# for (file in fastq_files) {
-#  results[[file]] <- process_fastq_file(
-#   fastq_path        = file,
-#   sample_id         = NULL,
-#   q_threshold       = 20,
-#   min_repeat_length = 10L,
-#   max_type_a        = 5L,
-#   max_type_b        = 2L,
-#   type_a_rate       = 0.05,          # 5% per-triplet error tolerance
-#   output_dir        = "~/Desktop/CAGlogger_Github/cag2.1results/2.1d_BandC.combined"
-#  )
-# }
-# toc()
+library(tictoc)
+tic()
+results <- list()
+for (file in fastq_files) {
+ results[[file]] <- process_fastq_file(
+  fastq_path        = file,
+  sample_id         = NULL,
+  q_threshold       = 20,
+  min_repeat_length = 10L,
+  max_type_a        = 5L,
+  max_type_b        = 1L,
+  type_a_rate       = 0.05,          # 5% per-triplet error tolerance
+  output_dir        = "~/Desktop/CAGlogger_Github/cag2.1results/2.1D"
+ )
+}
+toc()
